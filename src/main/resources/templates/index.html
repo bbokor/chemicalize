@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chemicalize calculation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://marvinjs.chemicalize.com/v1/826f6a32cba34418b1304a2d46f63567/client-settings.js"></script>
+    <script src="https://marvinjs.chemicalize.com/v1/client.js"></script>
+</head>
+<body>
+<h1>Chemicalize calculation</h1>
+<form th:action="@{/}" method="get" th:object="${calculationRequest}">
+    <label for="structure">Structure: </label>
+    <input id="structure" type="text" th:field="*{structure}"/>
+    <button type="submit">Calculate</button>
+</form>
+<hr>
+<table>
+    <tr th:each="item: ${result}">
+        <td th:text="${item.label}+': '"/>
+        <td th:text="${item.value}"/>
+    </tr>
+</table>
+<p th:text="${error} ? ${error.message}: ''"/>
+
+
+<div th:if="${result}" id="marvin-test" style="width: 600px; height: 480px"></div>
+<script>
+    ChemicalizeMarvinJs.createEditor("#marvin-test").then(function (marvin) {
+        marvin.importStructure("name", document.getElementById("structure").value);
+    });
+</script>
+</body>
+</html>
